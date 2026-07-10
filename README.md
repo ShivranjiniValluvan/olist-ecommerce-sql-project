@@ -2,20 +2,9 @@
 
 ## 📌 Overview
 
-An end-to-end **SQL Data Warehouse project** built using the **Olist Brazilian E-Commerce Dataset**, containing over **100,000 orders** across multiple Brazilian marketplaces.
+An end-to-end SQL Data Warehouse project built using the **Olist Brazilian E-Commerce Dataset**, containing over 100,000 orders across multiple Brazilian marketplaces.
 
-The project implements a **Medallion Architecture (Bronze → Silver → Gold)** to transform raw transactional data into a structured, analytics-ready **Star Schema** for reporting and business intelligence.
-
----
-
-## ✨ Key Highlights
-
-- End-to-end data warehouse design
-- Medallion architecture implementation (Bronze → Silver → Gold)
-- SQL-based ETL pipeline using stored procedures
-- Star schema dimensional modeling
-- Data quality validation framework
-- Real-world dataset (100k+ records)
+The project implements a **Medallion Architecture** (Bronze → Silver → Gold) to transform raw transactional data into a structured, analytics-ready Star Schema for reporting and business intelligence.
 
 ---
 
@@ -23,28 +12,15 @@ The project implements a **Medallion Architecture (Bronze → Silver → Gold)**
 
 ![Data Architecture](docs/architecture.png)
 
-### 🟤 Bronze Layer
-- Raw ingestion of 8 CSV files into SQL Server
-- Data loaded using `BULK INSERT`
-- No transformations applied
+The data architecture follows three progressive layers:
 
-### 🥈 Silver Layer
-- Data cleaning and standardization
-- Duplicate removal
-- Category translation (Portuguese → English)
-- Derived columns (delivery_days, late_flag)
-- Data enrichment
-
-### 🥇 Gold Layer
-- Business-ready Star Schema
-- Fact and dimension tables created using SQL views
-- Optimized for analytics and reporting
+- **🟤 Bronze Layer** — Raw data ingested as-is from 8 CSV source files into SQL Server using stored procedures and BULK INSERT. No transformations applied.
+- **🥈 Silver Layer** — Data cleaned, standardized, and enriched. Includes duplicate removal, date casting, derived columns (`delivery_days`, `late_flag`), category translation (Portuguese → English), and data enrichment.
+- **🥇 Gold Layer** — Business-ready Star Schema built as SQL Views, optimized for analytical reporting.
 
 ---
 
 ## 📂 Repository Structure
-
-```text
 olist-ecommerce-data-warehouse/
 │
 ├── data_quality/
@@ -71,49 +47,34 @@ olist-ecommerce-data-warehouse/
 │   └── init_database.sql
 │
 └── README.md
-```
 
 ---
 
 ## 📊 Dataset
 
-**Source:** [Olist Brazilian E-Commerce Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+**Source:** [Olist Brazilian E-Commerce Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) — Kaggle
 
-The dataset includes:
-
-| Dataset | Description |
-|----------|-------------|
-| Customers | Customer information and location |
-| Orders | Order lifecycle and timestamps |
-| Order Items | Products purchased in each order |
-| Payments | Payment methods and values |
-| Reviews | Customer ratings and comments |
-| Products | Product details and categories |
-| Sellers | Seller information |
-| Category Translation | Portuguese-to-English mapping |
+| File | Description |
+|---|---|
+| olist_customers_dataset.csv | Customer information and location |
+| olist_orders_dataset.csv | Order lifecycle and timestamps |
+| olist_order_items_dataset.csv | Products purchased in each order |
+| olist_order_payments_dataset.csv | Payment methods and values |
+| olist_order_reviews_dataset.csv | Customer ratings and comments |
+| olist_products_dataset.csv | Product details and categories |
+| olist_sellers_dataset.csv | Seller information |
+| product_category_name_translation.csv | Portuguese to English category mapping |
 
 ---
 
-## 🔄 ETL Pipeline
+## 🥇 Gold Layer — Star Schema
+dim_customers ─────┐
+dim_products  ─────┤
+├──── fact_orders
+dim_sellers   ─────┤
+dim_payments  ─────┘
 
-### 🟤 Bronze Layer
-Raw data ingestion from CSV files into SQL Server using stored procedures and `BULK INSERT`.
-
-### 🥈 Silver Layer
-Transformations applied:
-- Data cleaning
-- Standardization
-- Deduplication
-- Category mapping
-- Derived metrics (delivery time, delay flags)
-
-### 🥇 Gold Layer
-Star schema creation:
-- `fact_orders`
-- `dim_customers`
-- `dim_products`
-- `dim_sellers`
-- `dim_payments`
+For full column descriptions → [docs/data_catalog.md](docs/data_catalog.md)
 
 ---
 
@@ -122,7 +83,6 @@ Star schema creation:
 Validation checks include:
 - Duplicate detection
 - Null value checks
-- Primary key constraints
 - Referential integrity
 - Business rule validation
 
@@ -132,24 +92,20 @@ All checks are located in the `data_quality/` folder.
 
 ## ▶️ How to Run
 
-### Prerequisites
+**Prerequisites:**
 - SQL Server Express
 - SQL Server Management Studio (SSMS)
 
-### Steps
-
-1. Download dataset from Kaggle  
-2. Update file paths in `load_bronze.sql`  
-3. Run scripts in order:
-
-```text
+**Steps:**
+1. Download dataset from [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+2. Update file paths in `load_bronze.sql` to match your local dataset location
+3. Run scripts in this order:
 scripts/init_database.sql
-scripts/bronze/ddl_bronze.sql
-scripts/bronze/load_bronze.sql
-scripts/silver/ddl_silver.sql
-scripts/silver/load_silver.sql
-scripts/gold/ddl_gold.sql
-```
+→ scripts/bronze/ddl_bronze.sql
+→ scripts/bronze/load_bronze.sql
+→ scripts/silver/ddl_silver.sql
+→ scripts/silver/load_silver.sql
+→ scripts/gold/ddl_gold.sql
 
 4. Run validation scripts in `data_quality/`
 
@@ -158,11 +114,8 @@ scripts/gold/ddl_gold.sql
 ## 🛠️ Technologies Used
 
 | Tool | Purpose |
-|------|--------|
+|---|---|
 | SQL Server Express | Database engine |
-| SSMS | SQL development |
-| SQL | ETL + modeling |
-| Draw.io | Architecture design |
-| GitHub | Version control |
-
----
+| SSMS | SQL development and execution |
+| Draw.io | Architecture diagram |
+| GitHub | Version control and portfolio |
