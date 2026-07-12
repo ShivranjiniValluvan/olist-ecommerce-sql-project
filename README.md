@@ -90,7 +90,8 @@ Validation checks include:
 
 All checks are located in the `data_quality/` folder.
 
-## 📊 Project 2: Exploratory Data Analysis
+## 📊
+Exploratory Data Analysis
 
 SQL-based EDA performed on the Gold layer, covering database structure, dimensions, key measures, and business patterns such as revenue distribution and delivery performance.
 
