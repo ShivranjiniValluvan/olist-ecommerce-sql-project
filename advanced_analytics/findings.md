@@ -102,4 +102,4 @@ Within credit card orders, average order value rises steadily with installment c
 
 ---
 
-*Full queries: [`advanced_analytics_queries.sql`](./advanced_analytics_queries.sql)*
+
